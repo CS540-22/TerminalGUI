@@ -24,7 +24,7 @@ Ankush & ChaoHui & Hunter
 ## Proposed Solution & Technology
 
 Our software can be broken down into three parts:
-  - The user interface allows users interactively to select, search, click, execute, add, and remove commands.
+  - The user interface that allows users interactively to select, search, click, execute, add, and remove commands.
   - The filesystem or server to store the commands.
   - The ability to execute arbitrary shell commands.
 
