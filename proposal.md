@@ -67,7 +67,7 @@ We can either use the filesystem or database to store the commands. For the simp
 ```
 
 
-Finally,
+Finally, Python's `subprocess` module can invoke shell command and capture the stdout and stderr and render it in the user interface. 
 
 
 
@@ -80,3 +80,12 @@ Finally,
 
 
 ## Project Management
+  
+  - Basic UI 
+  - Command-line search 
+  - Data collections (Most frequently used commands)
+  - The outputs of each command among pipes.
+  - Makefile auto generator
+
+
+
