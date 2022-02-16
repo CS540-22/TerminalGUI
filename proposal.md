@@ -18,7 +18,21 @@ Ankush & ChaoHui & Hunter
 
 ## Customer Value
 
+Customer Need
+ - Primary customer: everyday programmers and unix-based terminal users.
+ - Desire: a streamlined, interactive terminal experience that has a flexible memory and personal customization.
+ - Rationale: the terminal's history is limited on its own and generally consists of cycling up previously issued commands to find what they might need to execute again. Each user will have their own unique set of frequently used commands and command archetypes and so tailoring the terminal experience to these needs can improve productivity.
+ - Market context: this tool will not likely be used in a corporate environment unless it first develops a substantial independent user-base. Most corporations already have a work environment already set up for all workers whereas independent users have flexibility in their choice of terminal environment.
 
+Proposed Solution
+ - Customer expectation: a streamlined terminal experience.
+ - Benefits: improved productivity.
+ - Novelty: the UI and expanded history services are arguably an improvement on ease of use.
+ - Test status: untested.
+
+Measures of Success
+ - User surveys and reviews.
+ - If possible, a user study with case and control volunteers to gauge productivity gains/losses and overall ease-of-use.
 
 
 ## Proposed Solution & Technology
