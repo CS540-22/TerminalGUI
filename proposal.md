@@ -81,11 +81,19 @@ Finally, Python's `subprocess` module can invoke shell command and capture the s
 
 ## Project Management
   
-  - Basic UI 
-  - Command-line search 
-  - Data collections (Most frequently used commands)
-  - The outputs of each command among pipes.
-  - Makefile auto generator
 
+Each sprint is a two-week period. 
+
+
+
+  - `Sprint 1:` Write the proposal.
+  - `Sprint 2:` Design, and implement the non-active user interface, and collect the most frequent-used command lines.
+  - `Sprint 3:` Implement events in our user interface (click a button, select an item from the menu, etc).
+  - `Sprint 4:` Implement search box to search for command line based on the description. Implement the backend where users can add their own commands.
+  - `Sprint 5:` Show the outputs of each command among pipes.
+  - `Sprint 6:` Shortcuts for executing commands.
+  - `Sprint 7:` Makefile auto generator (if time allows).
+
+  
 
 
