@@ -109,5 +109,21 @@ Each sprint is a two-week period.
   - `Sprint 7:` Makefile auto generator (if time allows).
 
   
+## Development Process
 
+- Our team has elected to use the agile development method as it is an iterative and flexible
+approach. Our team is already familiar with this approach and thus we all feel most
+comfortable with it plus we already have an overall picture of how our software should work
+to serve our customer. This contrasts with two other methods we considered: waterfall and
+extreme programming.
+- The waterfall method is too strict and linear for our team dynamic not
+to mention that it the planning stage can take up a significant time if not organized properly.
+Our team does not feel a need to spend so much time planning, as I mentioned we have a overall
+picture of how things should work out and thus having the freedom provided by the agile method
+is perferred.
+- Extreme programming could fit our project as it is arguably as flexible as agile,
+however with our team size being 3 members strong it seems like it would be a challenge (mainly
+regarding pair programming). Extreme programming can lead to cleaner coding, but as our team
+is small and we know we can work well together it becomes less of concern and so ultimately
+agile remains our choice due to familiarity.
 
