@@ -8,6 +8,7 @@ Ankush & ChaoHui & Hunter
   * [Proposed Solution & Technology](#proposed-solution---technology)
   * [Team](#team)
   * [Project Management](#project-management)
+  * [Development Process](#development-process)
 
 
 
