@@ -13,8 +13,11 @@ Ankush & ChaoHui & Hunter
 
 ## Introduction
 
+As developers, how often do we find ourselves pressing up to search for a command that we executed a dozen steps ago or trying to recall a command we found on StackOverflow last night? Too many to count. We introduce TerminalGUI an all-in-one visual solution to aid everyday programmers like you and me to lookup commands based on relevant descriptions, design macros that shorten lengthy instructions, and quickly traverse a project's history of commands. TerminalGUI will speed up the productivity of developers across the board by eliminating common command-line inefficiencies.
 
+Our idea is not novel in the context of defining a GUI for a terminal. Examples of this include Git SCM and Sublime Merge which are GUI-based applications targeting Git-specific commands. Our differentiator is to take this a step further and apply it to a project-level scope, allowing users to not only save their favorite git commands but also track related commands such as: project building, testing, deployment, etc. Additionally, our users can develop macros for these commands to further speed up their productivity.
 
+Meet the team: We are all Master's students pursuing a degree in Computer Science. Although our backgrounds may slightly differ, we have quite some experience in desiging and implementing software solutions as we collectively hold multiple projects and research/intern experiences.
 
 ## Customer Value
 
