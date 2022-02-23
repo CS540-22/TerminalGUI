@@ -8,13 +8,17 @@ Ankush & ChaoHui & Hunter
   * [Proposed Solution & Technology](#proposed-solution---technology)
   * [Team](#team)
   * [Project Management](#project-management)
+  * [Development Process](#development-process)
 
 
 
 ## Introduction
 
+As developers, how often do we find ourselves pressing up to search for a command that we executed a dozen steps ago or trying to recall a command we found on StackOverflow last night? Too many to count. We introduce TerminalGUI an all-in-one visual solution to aid everyday programmers like you and me to lookup commands based on relevant descriptions, design macros that shorten lengthy instructions, and quickly traverse a project's history of commands. TerminalGUI will speed up the productivity of developers across the board by eliminating common command-line inefficiencies.
 
+Our idea is not novel in the context of defining a GUI for a terminal. Examples of this include Git SCM and Sublime Merge which are GUI-based applications targeting Git-specific commands. Our differentiator is to take this a step further and apply it to a project-level scope, allowing users to not only save their favorite git commands but also track related commands such as: project building, testing, deployment, etc. Additionally, our users can develop macros for these commands to further speed up their productivity.
 
+Meet the team: We are all Master's students pursuing a degree in Computer Science. Although our backgrounds may slightly differ, we have quite some experience in desiging and implementing software solutions as we collectively hold multiple projects and research/intern experiences.
 
 ## Customer Value
 
@@ -109,5 +113,21 @@ Each sprint is a two-week period.
   - `Sprint 7:` Makefile auto generator (if time allows).
 
   
+## Development Process
 
+- Our team has elected to use the agile development method as it is an iterative and flexible
+approach. Our team is already familiar with this approach and thus we all feel most
+comfortable with it plus we already have an overall picture of how our software should work
+to serve our customer. This contrasts with two other methods we considered: waterfall and
+extreme programming.
+- The waterfall method is too strict and linear for our team dynamic not
+to mention that it the planning stage can take up a significant time if not organized properly.
+Our team does not feel a need to spend so much time planning, as I mentioned we have a overall
+picture of how things should work out and thus having the freedom provided by the agile method
+is perferred.
+- Extreme programming could fit our project as it is arguably as flexible as agile,
+however with our team size being 3 members strong it seems like it would be a challenge (mainly
+regarding pair programming). Extreme programming can lead to cleaner coding, but as our team
+is small and we know we can work well together it becomes less of concern and so ultimately
+agile remains our choice due to familiarity.
 
