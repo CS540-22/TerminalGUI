@@ -1,4 +1,4 @@
-Use Case 1 -- Moving the curser after typing a command.
+Use Case 1 -- Moving the cursor after typing a command.
 
 - Actor: TerminalGUI user.
 
