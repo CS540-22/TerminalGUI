@@ -14,9 +14,7 @@ from tkinter import *
 def on_configure(event, canvas):
     # update scrollregion after starting 'mainloop'
     # when all widgets are in canvas
-    print("ok")
     canvas.configure(scrollregion=canvas.bbox('all'))
-
 
 
 
@@ -42,8 +40,10 @@ class Terminal:
     def __init__(self, window, tab):
         self.tab = tab
         self.window = window
-        self.texts = []
-        self.entries = []
+
+
+        self.texts = []       # all the texts
+        self.entries = []     # all the command entires to type in
 
 
 
@@ -61,8 +61,6 @@ class Terminal:
         if (out == ""): out = "Command \"{}\" is not found".format(ent.get())
         text.config(text = out)
 
-        # sleep(1)
-
 
         if arg == len(self.texts) - 1: self.newCommand()
 
@@ -71,32 +69,9 @@ class Terminal:
         self.canvas.yview_scroll(3000, "units")
 
 
-        # self.canvas.configure(scrollregion=self.canvas.bbox('all'))
-
-        # self.frame = tk.Frame(master=self.tab)
-
-        # pwd = subprocess.check_output("pwd", shell=True).decode("utf-8")[:-1] + ": "
-        # tk.Label(master=self.frame, text=pwd, fg="red").grid(column = 0, row =2, padx=5)  
-        # self.ent = tk.Entry(master=self.frame, width=55)
-        # self.ent.grid(column = 1, row = 2)
-        # self.ent.bind('<Return>', lambda event, arg=1 : self.enterCallback(event, arg))
-        # self.text = tk.Label(master=self.frame, text="", justify="left")
-        # self.text.grid(column=0, row=3, sticky="w", padx=5)
-        # self.frame.pack(expand = True, fill="x", side="left")
-
     def render(self):
 
-        # self.frame = tk.Frame(master=self.tab)
-        # self.frame = VerticalScrolledFrame(self.tab)
-        # canvas_tab2 = tk.Canvas(self.tab, height=200, scrollregion=(0,0, 200,900))
-        # canvas_tab2.create_window(0,0, window=self.tab)
-
-        # scrollbar = ttk.Scrollbar(self.tab, orient=tk.VERTICAL)
-        # scrollbar.pack(fill=tk.Y, side=tk.RIGHT)
-        # scrollbar.config(command=canvas_tab2.yview)
-
-        # canvas_tab2.config(yscrollcommand=scrollbar.set)
-        # canvas_tab2.pack()
+      
 
 
         canvas = tk.Canvas(self.tab, width = 770,height = 550, scrollregion = (0, 0, 300, 1000))
@@ -109,46 +84,24 @@ class Terminal:
 
         # update scrollregion after starting 'mainloop'
         # when all widgets are in canvas
-        # canvas.configure(scrollregion=canvas.bbox('all'))
         canvas.bind('<Configure>', lambda event, canvas=canvas : on_configure(event, canvas))
 
         # --- put frame in canvas ---
-
         self.frame = tk.Frame(canvas)
         canvas.create_window((600, 0), window=self.frame)
         canvas.pack()
         self.canvas = canvas
-
-        # self.canvas = canvas
-
-        # self.scrollbar = tk.Scrollbar(self.frame, orient="vertical")
-        # self.scrollbar.pack(side="right",fill="y")
-        # self.scrollbar.config(command=tk.yview)
-
         self.newCommand()
-        # self.newCommand()
-        # self.newCommand()
-        # self.newCommand()
-
-        # self.newCommand()
-        # self.newCommand()
-        # self.newCommand()
-        # pwd = subprocess.check_output("pwd", shell=True).decode("utf-8")[:-1] + ": "
-        # tk.Label(master=self.frame, text=pwd, fg="red").grid(column = 0, row = 0, padx=5)  
-        # self.ent = tk.Entry(master=self.frame, width=55)
-        # self.ent.grid(column = 1, row = 0)
-        # self.ent.bind('<Return>', lambda event, arg=1 : self.enterCallback(event,arg))
-        # self.text = tk.Label(master=self.frame, text="", justify="left")
-        # self.text.grid(column=0, row=1, sticky="w", padx=5)
-        # self.frame.pack(expand = True, side="left")
+        
 
     def newCommand(self):
 
 
-        
+        # get row number
         command_id = len(self.texts)
         row=command_id * 2
 
+        # create the new command prompt and new empty text.
 
         pwd = subprocess.check_output("pwd", shell=True).decode("utf-8")[:-1] + ": "
         tk.Label(master=self.frame, text=pwd, fg="red").grid(column = 0, row = row, padx=5)
@@ -161,7 +114,6 @@ class Terminal:
         self.entries.append(ent)
         self.texts.append(text)
         
-
 
 def main():
     window = tk.Tk()
@@ -197,12 +149,6 @@ def main():
                                         pady = 30)
   
     window.mainloop()
-
-
-
-
-
-
 
 
 
