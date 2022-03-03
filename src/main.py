@@ -152,10 +152,13 @@ def main():
     tab_control = TabControl(window)
     tab_control.addTab("Terminal")
     tab_control.addTab("User Commands")
+    tab_control.addTab("Pipe")
     tab_control.pack(expand=True, fill ="both")
+
     
     tab1 = tab_control.getTabByName("Terminal")
     tab2 = tab_control.getTabByName("User Commands")
+    tab3 = tab_control.getTabByName("Pipe")
     # tab1.pack(side=tk.LEFT, fill=tk.BOTH, expand=tk.TRUE)
       
     
@@ -167,6 +170,9 @@ def main():
                                         row = 0, 
                                         padx = 30,
                                         pady = 30)
+
+    ttk.Label(tab3,
+              text ="Implement pipe here").pack()
   
     window.mainloop()
 
