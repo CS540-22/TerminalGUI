@@ -2,7 +2,7 @@ import tkinter as tk
 from tkinter import ttk
 import subprocess
 from tkinter import *
-
+import functools
 
 # name conversion
 #Label   lbl lbl_name
@@ -11,10 +11,6 @@ from tkinter import *
 #Text    txt txt_notes
 #Frame   frm frm_address
 
-def on_configure(event, canvas):
-    # update scrollregion after starting 'mainloop'
-    # when all widgets are in canvas
-    canvas.configure(scrollregion=canvas.bbox('all'))
 
 
 
@@ -69,9 +65,29 @@ class Terminal:
         self.canvas.yview_scroll(3000, "units")
 
 
+
+    def bound_to_mousewheel(self, event):
+        fp = functools.partial
+        self.canvas.bind_all("<Button-5>", fp(self.on_mousewheel, scroll=1))
+        self.canvas.bind_all("<Button-4>", fp(self.on_mousewheel, scroll=-1))
+       
+
+    def unbound_to_mousewheel(self, event):
+        self.canvas.unbind_all("<Button-4>")
+        self.canvas.unbind_all("<Button-5>")
+
+    def on_mousewheel(self, scroll):
+        self.canvas.yview_scroll(int(scroll), "units")
+
+
+    def on_configure(self, event):
+        # update scrollregion after starting 'mainloop'
+        # when all widgets are in canvas
+        self.canvas.configure(scrollregion=self.canvas.bbox('all'))
+
+
     def render(self):
 
-      
 
 
         canvas = tk.Canvas(self.tab, width = 770,height = 550, scrollregion = (0, 0, 300, 1000))
@@ -84,10 +100,15 @@ class Terminal:
 
         # update scrollregion after starting 'mainloop'
         # when all widgets are in canvas
-        canvas.bind('<Configure>', lambda event, canvas=canvas : on_configure(event, canvas))
+        canvas.bind('<Configure>', self.on_configure)
+        
+        # canvas.bind_all("<MouseWheel>", lambda event, canvas=canvas : on_mousewheel(event, canvas))
 
         # --- put frame in canvas ---
         self.frame = tk.Frame(canvas)
+
+        canvas.bind('<Enter>', self.bound_to_mousewheel)
+        canvas.bind('<Leave>', self.unbound_to_mousewheel)
         canvas.create_window((600, 0), window=self.frame)
         canvas.pack()
         self.canvas = canvas
@@ -95,7 +116,6 @@ class Terminal:
         
 
     def newCommand(self):
-
 
         # get row number
         command_id = len(self.texts)
