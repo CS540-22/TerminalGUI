@@ -133,7 +133,32 @@ class Terminal:
 
         self.entries.append(ent)
         self.texts.append(text)
-        
+
+class UserCommands:
+    
+    def __init__(self, window, tab):
+        self.tab = tab
+        self.window = window
+
+
+        self.texts = []       # all the texts
+        self.entries = []     # all the command entires to type in
+        self.all_commands = []
+
+    def getCommand(self, id):
+        pass
+
+
+    def render(self):
+
+        ttk.Label(self.tab,
+              text ="Lets dive into the\
+              world of computers").grid(column = 0,
+                                        row = 0, 
+                                        padx = 30,
+                                        pady = 30)
+
+
 
 def main():
     window = tk.Tk()
@@ -164,12 +189,11 @@ def main():
     
     terminal = Terminal(window, tab1)
     terminal.render()
-    ttk.Label(tab2,
-              text ="Lets dive into the\
-              world of computers").grid(column = 0,
-                                        row = 0, 
-                                        padx = 30,
-                                        pady = 30)
+
+
+    user_commands = UserCommands(window, tab2)
+    user_commands.render()
+
 
     ttk.Label(tab3,
               text ="Implement pipe here").pack()
