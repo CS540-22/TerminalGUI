@@ -176,12 +176,17 @@ class UserCommands:
 
     def sel(self):
         print(self.var.get())
+        pass
         # selection = "You selected the option " + str(var.get())
         # label.config(text = selection)
 
 
     def print_selection(self):
         pass
+
+    def execute(self, id):
+        print(id)
+
 
     def render(self):
 
@@ -203,9 +208,11 @@ class UserCommands:
         canvas.pack()
         self.canvas = canvas
 
+        fp = functools.partial
+
 
         row_num = 0
-        for command in self.all_commands:
+        for count, command in enumerate(self.all_commands):
 
             f =  tk.Frame(self.frame)
             # print(command)
@@ -226,21 +233,26 @@ class UserCommands:
                 wtype = widget["widget_type"]
                 if wtype == "radio_button":
 
-                    var = tk.IntVar(value=0)
+                    var = tk.StringVar(value=widget["options"][0])
                     self.vars.append(var)
                     # f.grid(row = 0, column = 0, sticky = 'w')
-                    for count, option in enumerate(widget["options"]):
+                    for option in widget["options"]:
                         if wtype == "radio_button":
-                            tk.Radiobutton(f, text=option + "  ", variable=var, value=count).pack(side = "left", anchor = tk.W)
+                            tk.Radiobutton(f, text=option + "  ", variable=var, value=option).pack(side = "left", anchor = tk.W)
                 elif wtype == "checkbox":
-                    for count, option in enumerate(widget["options"]):
-                        var = tk.IntVar(value=0)
+                    for option in widget["options"]:
+                        var = tk.StringVar(value="")
                         self.vars.append(var)
-                        tk.Checkbutton(f, text=option + "  ",variable=var, onvalue=1, offvalue=0).pack(side = "left", anchor = tk.W)
+                        tk.Checkbutton(f, text=option + "  ",variable=var, onvalue=option, offvalue="").pack(side = "left", anchor = tk.W)
 
 
                 elif wtype == "text":
                     tk.Entry(f, width=55).pack(side = "left", anchor = tk.W)
+
+            f = tk.Frame(self.frame)
+            f.grid(row = row_num, column = 0, sticky="w")
+            row_num = row_num + 1
+            tk.Button(f, text = "Execute", bg="red", command = fp(self.execute, id=count)).pack(padx = 10, side = "left", anchor = tk.W)
 
 
                 # print(name, widget)
@@ -249,8 +261,9 @@ class UserCommands:
                 #     print(name, widget)
 
 
-            
-
+        for var in self.vars:
+            if var.get() != "":
+                print(var.get())
 
 
         # f =  tk.Frame(self.tab)

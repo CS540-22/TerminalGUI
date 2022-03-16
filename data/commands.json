@@ -1,0 +1,29 @@
+[{
+  "command_name": "g++",
+  "categories": {
+    "C++ Version": {
+      "widget_type": "radio_button",
+      "options": ["--std=c++98", "--std=c++11", "--std=c++20"],
+      "description": ["Use c++98", "Use c++11", "Use c++20"]
+    },
+    "Output": {
+      "argument": "-o",
+      "widget_type": "text",
+      "description": "The name of the executable"
+    },
+    "Optimization": {
+      "widget_type": "radio_button",
+      "options": [" ", "-O1", "-O2", "-O3"],
+      "description": ["Optimize", "Optimize", "Optimize"]
+    },
+    "Warnings": {
+      "widget_type": "checkbox",
+      "options": ["-Werror", "-Wall"],
+      "description": ["Make all warnings into errors", "Show all warnings"]
+    }
+  }
+}
+
+
+
+]
