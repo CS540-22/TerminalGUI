@@ -4,6 +4,7 @@ import subprocess
 from tkinter import *
 import functools
 import json
+from lib.tooltip import CreateToolTip 
 
 # name conversion
 #Label   lbl lbl_name
@@ -11,8 +12,6 @@ import json
 #Entry   ent ent_age
 #Text    txt txt_notes
 #Frame   frm frm_address
-
-
 
 
 def create_canvas(tab):
@@ -61,13 +60,17 @@ class Terminal:
         out = ""
         ent = self.entries[arg]
         text = self.texts[arg]
+        # out = subprocess.check_output(ent.get(), stderr=subprocess.STDOUT, shell=True).decode("utf-8")
+        
+
+
         try :
             out = subprocess.check_output(ent.get(), stderr=subprocess.STDOUT, shell=True).decode("utf-8")
         except:
             pass
 
        
-        if (out == ""): out = "Command \"{}\" is not found".format(ent.get())
+        # if (out == ""): out = "Command \"{}\" is not found".format(ent.get())
         text.config(text = out)
 
 
@@ -145,8 +148,9 @@ class UserCommands:
 
 
         ## it's an array of array, the first index is the commnad id, the second index is t
-        self.command_widgets = []
-        self.vars = []
+        self.all_vars = []
+        self.all_flags = []
+        self.all_commands_labels = []
 
         with open('data/commands.json') as f:
             self.all_commands = json.load(f)
@@ -185,7 +189,20 @@ class UserCommands:
         pass
 
     def execute(self, id):
-        print(id)
+
+        command = self.all_commands[id]["command_name"]
+
+        for f, var in zip(self.all_flags[id], self.all_vars[id]):
+            if f != "": command += " " + f + " " + var.get()
+            else: command += " " + var.get()
+
+
+        text = self.all_commands_labels[id]
+        text.delete(0, END)
+        text.insert(0, command)
+        return command
+
+        print(command)
 
 
     def render(self):
@@ -211,8 +228,13 @@ class UserCommands:
         fp = functools.partial
 
 
+
         row_num = 0
         for count, command in enumerate(self.all_commands):
+
+
+            command_vars = []
+            flags = []
 
             f =  tk.Frame(self.frame)
             # print(command)
@@ -223,9 +245,14 @@ class UserCommands:
 
 
             for name, widget in command["categories"].items():
+                flag = ""
+                if "argument" in widget: flag = widget["argument"]
+                flags.append(flag)
 
                 f = tk.Frame(self.frame)
-                label = tk.Label(f, text = name + ": ").pack(padx = 10, side = "left", anchor = 'w')
+                label = tk.Label(f, text = name + ": ")
+                label.pack(padx = 10, side = "left", anchor = 'w')
+
 
                 f.grid(row = row_num, column = 0, sticky="w")
                 row_num = row_num + 1
@@ -234,34 +261,50 @@ class UserCommands:
                 if wtype == "radio_button":
 
                     var = tk.StringVar(value=widget["options"][0])
-                    self.vars.append(var)
+                    command_vars.append(var)
                     # f.grid(row = 0, column = 0, sticky = 'w')
-                    for option in widget["options"]:
+                    for option, description in zip(widget["options"], widget["description"]):
                         if wtype == "radio_button":
-                            tk.Radiobutton(f, text=option + "  ", variable=var, value=option).pack(side = "left", anchor = tk.W)
+                            rb = tk.Radiobutton(f, text=option + "  ", variable=var, value=option)
+                            rb.pack(side = "left", anchor = tk.W)
+                            CreateToolTip(rb, text = description)
+
+
                 elif wtype == "checkbox":
-                    for option in widget["options"]:
+                    for option, description in zip(widget["options"], widget["description"]):
                         var = tk.StringVar(value="")
-                        self.vars.append(var)
-                        tk.Checkbutton(f, text=option + "  ",variable=var, onvalue=option, offvalue="").pack(side = "left", anchor = tk.W)
+
+                        # if "argument" in widget: 
+                        command_vars.append(var)
+                        cb = tk.Checkbutton(f, text=option + "  ",variable=var, onvalue=option, offvalue="")
+                        cb.pack(side = "left", anchor = tk.W)
+                        CreateToolTip(cb, text = description)
 
 
                 elif wtype == "text":
-                    tk.Entry(f, width=55).pack(side = "left", anchor = tk.W)
+                    ent = tk.Entry(f, width=55)
+                    ent.pack(side = "left", anchor = tk.W)
+                    command_vars.append(ent)
+                    CreateToolTip(ent, text = widget["description"])
 
             f = tk.Frame(self.frame)
             f.grid(row = row_num, column = 0, sticky="w")
             row_num = row_num + 1
-            tk.Button(f, text = "Execute", bg="red", command = fp(self.execute, id=count)).pack(padx = 10, side = "left", anchor = tk.W)
+            tk.Button(f, text = "Show Command", command = fp(self.execute, id=count)).pack(padx = 10, side = "left", anchor = tk.W)
+            label = tk.Entry(f, text = "", width = 70)
+            label.pack(padx = 10, side = "left", anchor = tk.W)
 
-
+            self.all_commands_labels.append(label)
+            self.all_vars.append(command_vars)
+            self.all_flags.append(flags)
+            # self.all_commands_labels = []
                 # print(name, widget)
                 # for name, widget in category.items():
 
                 #     print(name, widget)
 
 
-        for var in self.vars:
+        for var in command_vars:
             if var.get() != "":
                 print(var.get())
 
