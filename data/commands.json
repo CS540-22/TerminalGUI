@@ -6,6 +6,10 @@
       "options": ["--std=c++98", "--std=c++11", "--std=c++20"],
       "description": ["Use c++98", "Use c++11", "Use c++20"]
     },
+    "Inputs": {
+      "widget_type": "text",
+      "description": "The name of src files"
+    },
     "Output": {
       "argument": "-o",
       "widget_type": "text",
@@ -21,6 +25,41 @@
       "options": ["-Werror", "-Wall"],
       "description": ["Make all warnings into errors", "Show all warnings"]
     }
+  }
+},
+{
+  "command_name": "grep",
+  "categories": {
+   
+   
+
+    "A": {
+      "argument": "-A",
+      "widget_type": "text",
+      "description": " a number of lines to display after a match"
+    },
+
+    "B": {
+      "argument": "-B",
+      "widget_type": "text",
+      "description": " a number of lines to display before a match"
+    },
+
+    "Other flags": {
+      "widget_type": "checkbox",
+      "options": ["-n", "-i"],
+      "description": ["Show line number", "Ignore case"]
+    },
+
+    "Patten": {
+      "widget_type": "text",
+      "description": "The patten"
+    },
+    "Input File": {
+      "widget_type": "text",
+      "description": "The input filename"
+    }
+
   }
 }
 

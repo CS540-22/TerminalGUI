@@ -193,16 +193,18 @@ class UserCommands:
         command = self.all_commands[id]["command_name"]
 
         for f, var in zip(self.all_flags[id], self.all_vars[id]):
-            if f != "": command += " " + f + " " + var.get()
+            if f != "" and var.get() != "": command += " " + f + " " + var.get()
             else: command += " " + var.get()
+
 
 
         text = self.all_commands_labels[id]
         text.delete(0, END)
         text.insert(0, command)
+        print(command)
         return command
 
-        print(command)
+       
 
 
     def render(self):
@@ -247,7 +249,7 @@ class UserCommands:
             for name, widget in command["categories"].items():
                 flag = ""
                 if "argument" in widget: flag = widget["argument"]
-                flags.append(flag)
+                
 
                 f = tk.Frame(self.frame)
                 label = tk.Label(f, text = name + ": ")
@@ -262,6 +264,7 @@ class UserCommands:
 
                     var = tk.StringVar(value=widget["options"][0])
                     command_vars.append(var)
+                    flags.append(flag)
                     # f.grid(row = 0, column = 0, sticky = 'w')
                     for option, description in zip(widget["options"], widget["description"]):
                         if wtype == "radio_button":
@@ -276,6 +279,7 @@ class UserCommands:
 
                         # if "argument" in widget: 
                         command_vars.append(var)
+                        flags.append(flag)
                         cb = tk.Checkbutton(f, text=option + "  ",variable=var, onvalue=option, offvalue="")
                         cb.pack(side = "left", anchor = tk.W)
                         CreateToolTip(cb, text = description)
@@ -285,6 +289,7 @@ class UserCommands:
                     ent = tk.Entry(f, width=55)
                     ent.pack(side = "left", anchor = tk.W)
                     command_vars.append(ent)
+                    flags.append(flag)
                     CreateToolTip(ent, text = widget["description"])
 
             f = tk.Frame(self.frame)
