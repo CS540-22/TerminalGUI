@@ -51,9 +51,7 @@ class Terminal:
 
 
         self.texts = []       # all the texts
-        self.entries = []     # all the command entires to type in
-
-
+        self.entries = []     # all the command entries to type in
 
     def enterCallback(self, event, arg):
         print(event, arg)
@@ -61,8 +59,6 @@ class Terminal:
         ent = self.entries[arg]
         text = self.texts[arg]
         # out = subprocess.check_output(ent.get(), stderr=subprocess.STDOUT, shell=True).decode("utf-8")
-        
-
 
         try :
             out = subprocess.check_output(ent.get(), stderr=subprocess.STDOUT, shell=True).decode("utf-8")
@@ -80,7 +76,28 @@ class Terminal:
         self.canvas.configure(scrollregion=self.canvas.bbox('all'))
         self.canvas.yview_scroll(3000, "units")
 
+        # Optionally, render progressive pipe output if the command is piped
+        if '|' in ent.get():
+            # Generate pipe_commands: "cm1 | cm2 | cm3", "cm1 | cm2", "cm1"
+            pipe_commands = []
+            split_commands = ent.get().split('|') # splits commands based on pipe
 
+            # Generates progressive pipe commands
+            for i in range(1, len(split_commands)):
+                tmpcm = ""
+                for cm in split_commands[:i]:
+                    tmpcm += (cm + '|')
+                tmpcm = tmpcm[:-2]
+                pipe_commands.append(tmpcm)
+
+            # Tacks on original command
+            pipe_commands.append(ent.get())
+
+            # Strips any whitespace
+            for cm in pipe_commands:
+                cm = cm.strip()
+
+            print(pipe_commands)
 
     def bound_to_mousewheel(self, event):
         fp = functools.partial
@@ -119,10 +136,8 @@ class Terminal:
         canvas.pack()
         self.canvas = canvas
         self.newCommand()
-        
 
     def newCommand(self):
-
         # get row number
         command_id = len(self.texts)
         row=command_id * 2
@@ -354,9 +369,77 @@ class UserCommands:
         # ent = tk.Entry(master=f, width=55)
         # ent.pack(side = "left")
 
+class PipeCommands:
+    def __init__(self, window, tab):
+        self.tab = tab
+        self.window = window
 
+        self.texts = []       # all the texts
+        self.entries = []     # all the command entires to type in
 
+        ## it's an array of array, the first index is the commnad id, the second index is t
+        self.all_vars = []
+        self.all_flags = []
+        self.all_commands_labels = []
 
+        with open('data/commands.json') as f:
+            self.all_commands = json.load(f)
+
+    def render(self):
+        # init canvas
+        canvas = create_canvas(self.tab)
+    
+        # configure canvas
+        canvas.bind('<Configure>', self.on_configure)
+
+        # --- put frame in canvas ---
+        self.frame = tk.Frame(canvas)
+
+        canvas.bind('<Enter>', self.bound_to_mousewheel)
+        canvas.bind('<Leave>', self.unbound_to_mousewheel)
+        canvas.create_window((0, 0), window=self.frame)
+        canvas.pack()
+        self.canvas = canvas
+
+        fp = functools.partial
+        self.newCommand()
+
+    def newCommand(self):
+
+        # get row number
+        command_id = len(self.texts)
+        row=command_id * 2
+
+        # create the new command prompt and new empty text.
+
+        pwd = subprocess.check_output("pwd", shell=True).decode("utf-8")[:-1] + ": "
+        tk.Label(master=self.frame, text=pwd, fg="red").grid(column = 0, row = row, padx=5)
+        ent = tk.Entry(master=self.frame, width=55)
+        ent.grid(column = 1, row = row)
+        ent.bind('<Return>', lambda event, command_id=command_id : self.enterCallback(event,command_id))
+        text = tk.Label(master=self.frame, text="", justify="left", wraplength=500)
+        text.grid(column=0, columnspan=100, row=row + 1, sticky="w", padx=5)
+
+        self.entries.append(ent)
+        self.texts.append(text)
+
+    def on_configure(self, event):
+        # update scrollregion after starting 'mainloop'
+        # when all widgets are in canvas
+        self.canvas.configure(scrollregion=self.canvas.bbox('all'))
+
+    def bound_to_mousewheel(self, event):
+        fp = functools.partial
+        self.canvas.bind_all("<Button-5>", fp(self.on_mousewheel, scroll=1))
+        self.canvas.bind_all("<Button-4>", fp(self.on_mousewheel, scroll=-1))
+       
+
+    def unbound_to_mousewheel(self, event):
+        self.canvas.unbind_all("<Button-4>")
+        self.canvas.unbind_all("<Button-5>")
+
+    def on_mousewheel(self, scroll):
+        self.canvas.yview_scroll(int(scroll), "units")
 
 def main():
     window = tk.Tk()
@@ -368,9 +451,6 @@ def main():
     style = ttk.Style(window)
     style.theme_use('classic')
     # ttk.Style(window).configure("TLABEL", foreground="red", background="white")
-
-  
-    
 
     tab_control = TabControl(window)
     tab_control.addTab("Terminal")
@@ -388,13 +468,11 @@ def main():
     terminal = Terminal(window, tab1)
     terminal.render()
 
-
     user_commands = UserCommands(window, tab2)
     user_commands.render()
 
-
-    ttk.Label(tab3,
-              text ="Implement pipe here").pack()
+    pipe_commands = PipeCommands(window, tab3)
+    pipe_commands.render()
   
     window.mainloop()
 
