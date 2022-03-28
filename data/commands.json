@@ -31,8 +31,6 @@
   "command_name": "grep",
   "categories": {
    
-   
-
     "A": {
       "argument": "-A",
       "widget_type": "text",
@@ -60,6 +58,16 @@
       "description": "The input filename"
     }
 
+  }
+},
+{
+  "command_name": "ls",
+  "categories": {
+    "Flags": {
+      "widget_type": "checkbox",
+      "options": ["-A", "-l"],
+      "description": ["List all entries except for . and ...  Always set for the super-user.", "List in long format."]
+    }
   }
 }
 
