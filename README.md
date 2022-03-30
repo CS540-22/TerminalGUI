@@ -22,3 +22,9 @@ Team:
   - ChaoHui: czheng4@vols.utk.edu
   - Hunter: hleef@vols.utk.edu
   - Ankush: apatel79@vols.utk.edu
+
+
+# How to run code
+```
+python src/main.py
+```
