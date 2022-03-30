@@ -69,7 +69,23 @@
       "description": ["List all entries except for . and ...  Always set for the super-user.", "List in long format."]
     }
   }
+},
+
+{
+  "command_name": "cat",
+  "categories": {
+    "Flags": {
+      "widget_type": "checkbox",
+      "options": ["-e", "-b"],
+      "description": ["Display dollar sign at the end of each line", "Number the non-blank output lines, starting at 1."]
+    },
+    "Output": {
+      "widget_type": "text",
+      "description": "The input filename"
+    }
+  }
 }
+
 
 
 
