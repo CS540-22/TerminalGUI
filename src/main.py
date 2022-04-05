@@ -76,29 +76,6 @@ class Terminal:
         self.canvas.configure(scrollregion=self.canvas.bbox('all'))
         self.canvas.yview_scroll(3000, "units")
 
-        # Optionally, render progressive pipe output if the command is piped
-        if '|' in ent.get():
-            # Generate pipe_commands: "cm1 | cm2 | cm3", "cm1 | cm2", "cm1"
-            pipe_commands = []
-            split_commands = ent.get().split('|') # splits commands based on pipe
-
-            # Generates progressive pipe commands
-            for i in range(1, len(split_commands)):
-                tmpcm = ""
-                for cm in split_commands[:i]:
-                    tmpcm += (cm + '|')
-                tmpcm = tmpcm[:-2]
-                pipe_commands.append(tmpcm)
-
-            # Tacks on original command
-            pipe_commands.append(ent.get())
-
-            # Strips any whitespace
-            for cm in pipe_commands:
-                cm = cm.strip()
-
-            print(pipe_commands)
-
     def bound_to_mousewheel(self, event):
         fp = functools.partial
         self.canvas.bind_all("<Button-5>", fp(self.on_mousewheel, scroll=1))
@@ -119,7 +96,7 @@ class Terminal:
         self.canvas.configure(scrollregion=self.canvas.bbox('all'))
 
 
-    def render(self):
+    def render(self, pipe_commands):
 
         canvas = create_canvas(self.tab)
         
@@ -135,9 +112,9 @@ class Terminal:
         canvas.create_window((600, 0), window=self.frame)
         canvas.pack()
         self.canvas = canvas
-        self.newCommand()
+        self.newCommand(pipe_commands)
 
-    def newCommand(self):
+    def newCommand(self, pipe_commands):
         # get row number
         command_id = len(self.texts)
         row=command_id * 2
@@ -154,6 +131,30 @@ class Terminal:
 
         self.entries.append(ent)
         self.texts.append(text)
+
+        # Optionally, render progressive pipe output if the command is piped
+        if '|' in ent.get():
+            # Generate pipe_commands: "cm1 | cm2 | cm3", "cm1 | cm2", "cm1"
+            pipe_commands_list = []
+            split_commands = ent.get().split('|') # splits commands based on pipe
+
+            # Generates progressive pipe commands
+            for i in range(1, len(split_commands)):
+                tmpcm = ""
+                for cm in split_commands[:i]:
+                    tmpcm += (cm + '|')
+                tmpcm = tmpcm[:-2]
+                pipe_commands_list.append(tmpcm)
+
+            # Tacks on original command
+            pipe_commands_list.append(ent.get())
+
+            # Strips any whitespace
+            for cm in pipe_commands_list:
+                cm = cm.strip()
+
+            print(pipe_commands_list)
+            pipe_commands.render()
 
 class UserCommands:
     
@@ -458,27 +459,22 @@ def main():
     tab_control.addTab("Pipe")
     tab_control.pack(expand=True, fill ="both")
 
-    
     tab1 = tab_control.getTabByName("Terminal")
     tab2 = tab_control.getTabByName("User Commands")
     tab3 = tab_control.getTabByName("Pipe")
     # tab1.pack(side=tk.LEFT, fill=tk.BOTH, expand=tk.TRUE)
       
     
+    pipe_commands = PipeCommands(window, tab3)
+    pipe_commands.render()
+
     terminal = Terminal(window, tab1)
-    terminal.render()
+    terminal.render(pipe_commands)
 
     user_commands = UserCommands(window, tab2)
     user_commands.render()
 
-    pipe_commands = PipeCommands(window, tab3)
-    pipe_commands.render()
-  
     window.mainloop()
-
-
-
-
 
 if __name__ == "__main__":
     main()
