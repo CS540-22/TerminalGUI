@@ -1,10 +1,10 @@
 import tkinter as tk
 from tkinter import ttk
-import subprocess
 from tkinter import *
 import functools
 import json
-from lib.tooltip import CreateToolTip 
+from lib.tooltip import CreateToolTip
+import subprocess
 
 # name conversion
 #Label   lbl lbl_name
@@ -60,7 +60,7 @@ class Terminal:
         text = self.texts[arg]
         # out = subprocess.check_output(ent.get(), stderr=subprocess.STDOUT, shell=True).decode("utf-8")
 
-        try :
+        try:
             out = subprocess.check_output(ent.get(), stderr=subprocess.STDOUT, shell=True).decode("utf-8")
         except:
             pass
@@ -157,7 +157,7 @@ class Terminal:
             pipe_commands.render()
 
 class UserCommands:
-    
+
     def __init__(self, window, tab):
         self.tab = tab
         self.window = window
@@ -277,7 +277,6 @@ class UserCommands:
 
                 wtype = widget["widget_type"]
                 if wtype == "radio_button":
-
                     var = tk.StringVar(value=widget["options"][0])
                     command_vars.append(var)
                     flags.append(flag)
