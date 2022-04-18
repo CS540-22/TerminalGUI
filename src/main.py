@@ -189,6 +189,7 @@ class UserCommands:
         # update scrollregion after starting 'mainloop'
         # when all widgets are in canvas
         self.canvas.configure(scrollregion=self.canvas.bbox('all'))
+        self.canvas.yview_scroll(-100000, "units")
 
     def getCommand(self, id):
         pass
@@ -328,46 +329,6 @@ class UserCommands:
             if var.get() != "":
                 print(var.get())
 
-
-        # f =  tk.Frame(self.tab)
-        # self.var = tk.IntVar(value=1)
-        # var = self.var
-        # self.var.set(1)
-
-
-        # f.grid(row = 0, column = 0, sticky = 'w')
-        # R1 = tk.Radiobutton(f, text="Option 1", variable=var, value=1,
-        #                   command=self.sel)
-
-        # R1.pack( side = "left", anchor = tk.W )
-
-        # R2 = tk.Radiobutton(f, text="Option 2", variable=var, value=2,
-        #                   command=self.sel)
-
-        # R2.pack( side = "left", anchor = tk.W)
-
-        # R3 = tk.Radiobutton(f, text="Option 3", variable=var, value=3,
-        #                   command=self.sel)
-
-        # R3.pack( side = "left", anchor = tk.W)
-
-
-        # f = tk.Frame(self.tab)
-        # f.grid(row = 1, column = 0, sticky = 'w')
-        
-        # var1 = tk.IntVar()
-        # var2 = tk.IntVar()
-        
-        # c1 = tk.Checkbutton(f, text='Python',variable=var1, onvalue=1, offvalue=0, command=self.print_selection)
-        # c1.pack(side = "left", anchor = tk.W)
-        # c2 = tk.Checkbutton(f, text='C++',variable=var2, onvalue=1, offvalue=0, command=self.print_selection)
-        # c2.pack(side = "left")
-
-
-        # f = tk.Frame(self.tab)
-        # f.grid(row = 2, column = 0, sticky = 'w')
-        # ent = tk.Entry(master=f, width=55)
-        # ent.pack(side = "left")
 
 class PipeCommands:
     def __init__(self, window, tab):
