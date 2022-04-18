@@ -70,11 +70,18 @@ class Terminal:
         text.config(text = out)
 
 
-        if arg == len(self.texts) - 1: self.newCommand()
+        if arg == len(self.texts) - 1: self.newCommand(None)
 
         self.tab.update()
         self.canvas.configure(scrollregion=self.canvas.bbox('all'))
         self.canvas.yview_scroll(3000, "units")
+
+    def update_command(self, command):
+        ent = self.entries[len(self.entries) - 1]
+        text = self.texts[len(self.texts) - 1]
+        text.config(text = "")
+        ent.delete(0, END)
+        ent.insert(0, command)
 
     def bound_to_mousewheel(self, event):
         fp = functools.partial
@@ -95,7 +102,6 @@ class Terminal:
         # when all widgets are in canvas
         self.canvas.configure(scrollregion=self.canvas.bbox('all'))
 
-
     def render(self, pipe_commands):
 
         canvas = create_canvas(self.tab)
@@ -114,7 +120,7 @@ class Terminal:
         self.canvas = canvas
         self.newCommand(pipe_commands)
 
-    def newCommand(self, pipe_commands):
+    def newCommand(self, pipe_commands, command = None):
         # get row number
         command_id = len(self.texts)
         row=command_id * 2
@@ -128,6 +134,7 @@ class Terminal:
         ent.bind('<Return>', lambda event, command_id=command_id : self.enterCallback(event,command_id))
         text = tk.Label(master=self.frame, text="", justify="left", wraplength=500)
         text.grid(column=0, columnspan=100, row=row + 1, sticky="w", padx=5)
+        if command != None: command.insert(0, command)
 
         self.entries.append(ent)
         self.texts.append(text)
@@ -158,7 +165,7 @@ class Terminal:
 
 class UserCommands:
 
-    def __init__(self, window, tab):
+    def __init__(self, window, tab, terminal):
         self.tab = tab
         self.window = window
 
@@ -167,6 +174,7 @@ class UserCommands:
         self.all_vars = []
         self.all_flags = []
         self.all_commands_labels = []
+        self.terminal = terminal
 
         with open('data/commands.json') as f:
             self.all_commands = json.load(f)
@@ -218,11 +226,9 @@ class UserCommands:
         text = self.all_commands_labels[id]
         text.delete(0, END)
         text.insert(0, command)
+        self.terminal.update_command(command)
         print(command)
         return command
-
-       
-
 
     def render(self):
 
@@ -246,6 +252,7 @@ class UserCommands:
 
         fp = functools.partial
 
+        # self.canvas.pack_forget()
 
 
         row_num = 0
@@ -256,6 +263,7 @@ class UserCommands:
             flags = []
 
             f =  tk.Frame(self.frame)
+
             # print(command)
             name = command["command_name"]
             label = tk.Label(f, text = name, font=("Arial", 20)).pack(side = "left", anchor = 'w')
@@ -431,7 +439,7 @@ def main():
     terminal = Terminal(window, tab1)
     terminal.render(pipe_commands)
 
-    user_commands = UserCommands(window, tab2)
+    user_commands = UserCommands(window, tab2, terminal)
     user_commands.render()
 
     window.mainloop()
