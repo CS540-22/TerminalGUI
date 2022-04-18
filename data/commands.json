@@ -84,9 +84,36 @@
       "description": "The input filename"
     }
   }
+},
+
+{
+  "command_name": "head",
+  "categories": {
+    "Flags": {
+      "widget_type": "checkbox",
+      "options": ["-c", "-n", "-q", "-v", "-z"],
+      "description": ["Output the first NUM bytes of each file", "Output the first NUM lines of each file instead of first 10", "Never print headers giving file names", "Always print headers giving file names", "Line delimiter is NUL, not newline"]
+    },
+    "Output": {
+      "widget_type": "text",
+      "description": "The input filename"
+    }
+  }
+},
+
+{
+  "command_name": "tail",
+  "categories": {
+    "Flags": {
+      "widget_type": "checkbox",
+      "options": ["-c", "-n", "-f", "-s", "-q", "-v", "-z"],
+      "description": ["Output the last NUM bytes of each file", "Output the last NUM lines of each file instead of last 10", "Output appended data as the file grows", "with -f, sleep for approximately NUM seconds (default 1.0) between iterations", "Never print headers giving file names", "Always print headers giving file names", "Line delimiter is NUL, not newline"]
+    },
+    "Output": {
+      "widget_type": "text",
+      "description": "The input filename"
+    }
+  }
 }
-
-
-
 
 ]
