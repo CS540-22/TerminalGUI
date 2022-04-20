@@ -11,6 +11,6 @@
 ## Future Goals for Deployment/Development
 - Fix the issue between different operating environments within the same OS and expand operating systems supported.
 - Ultimately, a packaged executable would be desirable instead of launching the overlay from within the terminal.
-  - One possibility is to use pyinstaller, however, a preliminary test was non-functional.
+  - One possibility is to use pyinstaller (a package for converting a python app into a single package), however, a preliminary test was non-functional.
   - This is likely due to the directory structure and should be easily addressable with tweaks to the source code (though we know these modifications can wreck original functionality as discussed in lecture and thus it must still be done with care).
   - Additionally, requirements would not change should pyinstaller be utilized and thus the user environment remains a large factor in successful operation.
