@@ -1,3 +1,16 @@
 apple
+banana
+cat
 apple
+banana
+cat
 apple
+banana
+cat
+apple
+banana
+banana
+cat
+apple
+banana
+cat

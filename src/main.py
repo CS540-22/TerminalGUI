@@ -1,3 +1,4 @@
+from asyncio.windows_utils import pipe
 import tkinter as tk
 from tkinter import ttk
 from tkinter import *
@@ -45,7 +46,7 @@ class TabControl:
         self.tab_control.pack(options)
 
 class Terminal:
-    def __init__(self, window, tab):
+    def __init__(self, window, tab, pipe_commands):
         self.tab = tab
         self.window = window
 
@@ -53,8 +54,10 @@ class Terminal:
         self.texts = []       # all the texts
         self.entries = []     # all the command entries to type in
 
+        # Used by the terminal when a command with '|' is used
+        self.pipe_commands = pipe_commands
+
     def enterCallback(self, event, arg):
-        print(event, arg)
         out = ""
         ent = self.entries[arg]
         text = self.texts[arg]
@@ -75,6 +78,30 @@ class Terminal:
         self.tab.update()
         self.canvas.configure(scrollregion=self.canvas.bbox('all'))
         self.canvas.yview_scroll(3000, "units")
+
+        # Optionally, render progressive pipe output if the command is piped
+        if '|' in ent.get():
+            # print("Progressive pipe triggered!")
+            # Generate pipe_commands: "cm1 | cm2 | cm3", "cm1 | cm2", "cm1"
+            pipe_commands_list = []
+            split_commands = ent.get().split('|') # splits commands based on pipe
+
+            # Generates progressive pipe commands
+            for i in range(1, len(split_commands)):
+                tmpcm = ""
+                for cm in split_commands[:i]:
+                    tmpcm += (cm + '|')
+                tmpcm = tmpcm[:-2]
+                pipe_commands_list.append(tmpcm)
+
+            # Tacks on original command
+            pipe_commands_list.append(ent.get())
+
+            # Strips any whitespace
+            for cm in pipe_commands_list:
+                cm = cm.strip()
+
+            self.pipe_commands.render(pipe_commands_list)
 
     def update_command(self, command):
         ent = self.entries[len(self.entries) - 1]
@@ -102,7 +129,7 @@ class Terminal:
         # when all widgets are in canvas
         self.canvas.configure(scrollregion=self.canvas.bbox('all'))
 
-    def render(self, pipe_commands):
+    def render(self):
 
         canvas = create_canvas(self.tab)
         
@@ -118,9 +145,9 @@ class Terminal:
         canvas.create_window((0, 0), window=self.frame)
         canvas.pack()
         self.canvas = canvas
-        self.newCommand(pipe_commands)
+        self.newCommand()
 
-    def newCommand(self, pipe_commands, command = None):
+    def newCommand(self, command = None):
         # get row number
         command_id = len(self.texts)
         row=command_id * 2
@@ -138,30 +165,6 @@ class Terminal:
 
         self.entries.append(ent)
         self.texts.append(text)
-
-        # Optionally, render progressive pipe output if the command is piped
-        if '|' in ent.get():
-            # Generate pipe_commands: "cm1 | cm2 | cm3", "cm1 | cm2", "cm1"
-            pipe_commands_list = []
-            split_commands = ent.get().split('|') # splits commands based on pipe
-
-            # Generates progressive pipe commands
-            for i in range(1, len(split_commands)):
-                tmpcm = ""
-                for cm in split_commands[:i]:
-                    tmpcm += (cm + '|')
-                tmpcm = tmpcm[:-2]
-                pipe_commands_list.append(tmpcm)
-
-            # Tacks on original command
-            pipe_commands_list.append(ent.get())
-
-            # Strips any whitespace
-            for cm in pipe_commands_list:
-                cm = cm.strip()
-
-            print(pipe_commands_list)
-            pipe_commands.render()
 
 class UserCommands:
 
@@ -354,7 +357,7 @@ class PipeCommands:
         with open('data/commands.json') as f:
             self.all_commands = json.load(f)
 
-    def render(self):
+    def render(self, pipe_commands_list):
         # init canvas
         canvas = create_canvas(self.tab)
     
@@ -371,26 +374,20 @@ class PipeCommands:
         self.canvas = canvas
 
         fp = functools.partial
-        self.newCommand()
 
-    def newCommand(self):
+        # Loop through pipe_commands
+        tk.Label(master=self.frame, text="Progressive pipe output for '" + pipe_commands_list[-1] + '\':', fg="black", font=('Arial', 14,'bold')).grid(column = 0, row = 0)
+        for i,cmd in enumerate(pipe_commands_list):
+            self.renderPipeCommand(i,cmd)
 
-        # get row number
-        command_id = len(self.texts)
-        row=command_id * 2
+    def renderPipeCommand(self, pos, command):
+        try:
+            out = subprocess.check_output(command, stderr=subprocess.STDOUT, shell=True).decode("utf-8")
+        except:
+            pass
 
-        # create the new command prompt and new empty text.
-
-        pwd = subprocess.check_output("pwd", shell=True).decode("utf-8")[:-1] + ": "
-        tk.Label(master=self.frame, text=pwd, fg="red").grid(column = 0, row = row, padx=5)
-        ent = tk.Entry(master=self.frame, width=55)
-        ent.grid(column = 1, row = row)
-        ent.bind('<Return>', lambda event, command_id=command_id : self.enterCallback(event,command_id))
-        text = tk.Label(master=self.frame, text="", justify="left", wraplength=500)
-        text.grid(column=0, columnspan=100, row=row + 1, sticky="w", padx=5)
-
-        self.entries.append(ent)
-        self.texts.append(text)
+        tk.Label(master=self.frame, text=command+':', fg="black", font=('Arial', 12,'bold')).grid(column = 0, row = pos*2+1, sticky='nw',pady=2)
+        tk.Label(master=self.frame, text=out, fg="red", font=('Arial', 10)).grid(column = 0, row = pos*2+2, sticky='nw',padx=2)
 
     def on_configure(self, event):
         # update scrollregion after starting 'mainloop'
@@ -432,12 +429,11 @@ def main():
     tab3 = tab_control.getTabByName("Pipe")
     # tab1.pack(side=tk.LEFT, fill=tk.BOTH, expand=tk.TRUE)
       
-    
+    # Pipe commands is controlled by the terminal
     pipe_commands = PipeCommands(window, tab3)
-    pipe_commands.render()
 
-    terminal = Terminal(window, tab1)
-    terminal.render(pipe_commands)
+    terminal = Terminal(window, tab1, pipe_commands)
+    terminal.render()
 
     user_commands = UserCommands(window, tab2, terminal)
     user_commands.render()
