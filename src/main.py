@@ -115,7 +115,7 @@ class Terminal:
 
         canvas.bind('<Enter>', self.bound_to_mousewheel)
         canvas.bind('<Leave>', self.unbound_to_mousewheel)
-        canvas.create_window((600, 0), window=self.frame)
+        canvas.create_window((0, 0), window=self.frame)
         canvas.pack()
         self.canvas = canvas
         self.newCommand(pipe_commands)
