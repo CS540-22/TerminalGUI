@@ -345,19 +345,19 @@ class PipeCommands:
     def __init__(self, window, tab):
         self.tab = tab
         self.window = window
+        self.labels = []
+        self.canvas = None
 
-        self.texts = []       # all the texts
-        self.entries = []     # all the command entires to type in
-
-        ## it's an array of array, the first index is the commnad id, the second index is t
-        self.all_vars = []
-        self.all_flags = []
-        self.all_commands_labels = []
-
-        with open('data/commands.json') as f:
-            self.all_commands = json.load(f)
+    def clear_grid(widget):
+        widget.grid_remove()
 
     def render(self, pipe_commands_list):
+        # Remove existing canvas
+        if self.canvas != None:
+            for widget in self.canvas.master.winfo_children():
+                # print(widget)
+                widget.destroy()
+        
         # init canvas
         canvas = create_canvas(self.tab)
     
@@ -369,14 +369,15 @@ class PipeCommands:
 
         canvas.bind('<Enter>', self.bound_to_mousewheel)
         canvas.bind('<Leave>', self.unbound_to_mousewheel)
-        canvas.create_window((0, 0), window=self.frame)
+        canvas.create_window((0, 0), window=self.frame, anchor='nw')
         canvas.pack()
+
         self.canvas = canvas
 
-        fp = functools.partial
-
         # Loop through pipe_commands
-        tk.Label(master=self.frame, text="Progressive pipe output for '" + pipe_commands_list[-1] + '\':', fg="black", font=('Arial', 14,'bold')).grid(column = 0, row = 0)
+        head_label = tk.Label(master=self.frame, text="Progressive pipe output for '" + pipe_commands_list[-1] + '\':', fg="black", font=('Arial', 14,'bold'))
+        head_label.grid(column = 0, row = 0)
+        self.labels.append(head_label)
         for i,cmd in enumerate(pipe_commands_list):
             self.renderPipeCommand(i,cmd)
 
@@ -386,8 +387,14 @@ class PipeCommands:
         except:
             pass
 
-        tk.Label(master=self.frame, text=command+':', fg="black", font=('Arial', 12,'bold')).grid(column = 0, row = pos*2+1, sticky='nw',pady=2)
-        tk.Label(master=self.frame, text=out, fg="red", font=('Arial', 10)).grid(column = 0, row = pos*2+2, sticky='nw',padx=2)
+        cmd_label = tk.Label(master=self.frame, text=command+':', fg="black", font=('Arial', 12,'bold'))
+        cmd_label.grid(column = 0, row = pos*2+1, sticky='nw',pady=2)
+
+        out_label=tk.Label(master=self.frame, text=out, fg="red", font=('Arial', 10))
+        out_label.grid(column = 0, row = pos*2+2, sticky='nw',padx=2)
+
+        self.labels.append(cmd_label)
+        self.labels.append(out_label)
 
     def on_configure(self, event):
         # update scrollregion after starting 'mainloop'
