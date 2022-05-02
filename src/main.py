@@ -1,4 +1,3 @@
-from asyncio.windows_utils import pipe
 import tkinter as tk
 from tkinter import ttk
 from tkinter import *
