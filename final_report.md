@@ -97,6 +97,7 @@ Our final prototype is composed of three components, which are "terminal", "user
 We show the picture of each component below along with its explanation.
 
 - Terminal tab
+  With the terminal tab, we have all of the interactability as supplied by a standard unix-based terminal. Commands can be typed in and executed, however, our interface allows users to move the cursor within a typed command via clicks which is not possible with a standard terminal interface. This is quite useful for fixing a command quickly as opposed to either re-entering the entire command or using the arrow keys to navigate to the particular error point. Users can also alter a previously executed command, then re-execute, and see the output in the same window position as opposed to the continous output that is seen with standard terminals (note this is akin to code interaction within a Jupyter Notebook).
   ![](./imgs/terminal.png)
 
 - User commands
